@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech Decoded | Agile Wealth Academy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f5;color:#1a1a1a;min-height:100vh}
+.app{max-width:680px;margin:0 auto;padding:1rem}
+.header{background:#1a1a1a;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;align-items:center;gap:14px}
+.app-title{font-size:22px;font-weight:600;color:#C9A227;line-height:1.2}
+.app-sub{font-size:12px;color:#808080;margin-top:2px}
+.mode-tabs{display:flex;gap:8px;margin-bottom:1rem}
+.mode-tab{flex:1;padding:10px;border:1px solid #ddd;border-radius:10px;background:#fff;color:#666;font-size:14px;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.mode-tab.active{background:#1a1a1a;color:#C9A227;border-color:#1a1a1a;font-weight:500}
+.controls{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:180px}
+.search-wrap input{width:100%;padding:10px 14px;font-size:15px;border:1px solid #ddd;border-radius:10px;background:#fff;color:#1a1a1a;font-family:inherit}
+.search-wrap input:focus{outline:none;border-color:#C9A227;box-shadow:0 0 0 3px rgba(201,162,39,0.1)}
+.cat-select{padding:10px 12px;font-size:14px;border:1px solid #ddd;border-radius:10px;background:#fff;color:#1a1a1a;font-family:inherit}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem}
+.stat{background:#fff;border-radius:10px;padding:10px;text-align:center;border:1px solid #eee}
+.stat-n{font-size:20px;font-weight:600;color:#1a1a1a}
+.stat-l{font-size:11px;color:#888;margin-top:2px}
+.letter-head{font-size:16px;font-weight:600;color:#C9A227;border-bottom:1px solid #eee;padding-bottom:6px;margin:1.25rem 0 8px}
+.term-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:border-color 0.15s;-webkit-tap-highlight-color:transparent}
+.term-card:hover{border-color:#C9A227}
+.term-card:active{background:#fffbf0}
+.term-card.open{border-color:#C9A227;border-width:1.5px}
+.term-card.locked{opacity:0.5;cursor:default}
+.term-card.locked:hover{border-color:#eee}
+.term-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.term-name{font-size:15px;font-weight:600;color:#1a1a1a;flex:1}
+.term-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.cat-badge{font-size:11px;font-weight:500;padding:3px 8px;border-radius:20px}
+.cat-Ceremony{background:#E1F5EE;color:#0F6E56}
+.cat-Role{background:#E6F1FB;color:#185FA5}
+.cat-Artifact{background:#FAEEDA;color:#854F0B}
+.cat-Metric{background:#EEEDFE;color:#3C3489}
+.cat-Tool{background:#FAECE7;color:#993C1D}
+.cat-Concept{background:#F1EFE8;color:#444441}
+.arr{font-size:12px;color:#aaa;transition:transform 0.2s;display:inline-block}
+.arr.open{transform:rotate(180deg)}
+.lock-icon{font-size:14px;color:#bbb}
+.term-body{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #eee}
+.term-body.show{display:block}
+.def-text{font-size:14px;color:#555;line-height:1.7;margin-bottom:10px}
+.trenches{background:#FFFBF0;border-left:3px solid #C9A227;padding:10px 12px;border-radius:0 8px 8px 0}
+.tr-label{font-size:11px;font-weight:600;color:#854F0B;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.tr-text{font-size:13px;color:#633806;line-height:1.6;font-style:italic}
+.paywall{background:#1a1a1a;border-radius:16px;padding:2rem 1.5rem;text-align:center;margin:1rem 0}
+.pw-badge{display:inline-block;background:#C9A227;color:#1a1a1a;font-size:11px;font-weight:600;padding:4px 14px;border-radius:20px;margin-bottom:14px;letter-spacing:0.5px}
+.pw-title{font-size:22px;font-weight:600;color:#C9A227;margin-bottom:8px}
+.pw-sub{font-size:14px;color:#888;margin-bottom:20px;line-height:1.6}
+.pw-features{text-align:left;display:inline-block;margin-bottom:24px}
+.pw-feat{font-size:13px;color:#ccc;margin-bottom:10px;display:flex;align-items:flex-start;gap:10px;line-height:1.4}
+.pw-check{color:#C9A227;font-weight:700;flex-shrink:0;font-size:15px}
+.pw-btn{background:#C9A227;color:#1a1a1a;border:none;padding:14px 28px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;width:100%;margin-bottom:10px;font-family:inherit;transition:background 0.15s}
+.pw-btn:hover{background:#EF9F27}
+.pw-btn:active{background:#BA7517}
+.pw-note{font-size:12px;color:#666}
+.no-res{text-align:center;padding:3rem;color:#888;font-size:15px}
+.fc-score{display:flex;gap:10px;justify-content:center;margin-bottom:1rem}
+.fc-score-item{background:#fff;border:1px solid #eee;border-radius:10px;padding:10px 20px;text-align:center;flex:1}
+.fc-score-n{font-size:20px;font-weight:600;color:#1a1a1a}
+.fc-score-l{font-size:11px;color:#888;margin-top:2px}
+.fc-prog{font-size:13px;color:#888;text-align:center;margin-bottom:12px}
+.fc-card{background:#fff;border:1px solid #eee;border-radius:16px;padding:2rem 1.5rem;text-align:center;min-height:200px;display:flex;flex-direction:column;justify-content:center;margin-bottom:1rem}
+.fc-cat-b{margin-bottom:14px}
+.fc-term{font-size:24px;font-weight:600;color:#1a1a1a;margin-bottom:16px;line-height:1.3}
+.fc-def{font-size:14px;color:#555;line-height:1.7;display:none;margin-bottom:14px;text-align:left}
+.fc-def.show{display:block}
+.fc-trenches{background:#FFFBF0;border-left:3px solid #C9A227;padding:10px 12px;border-radius:0 8px 8px 0;text-align:left;display:none;margin-top:8px}
+.fc-trenches.show{display:block}
+.fc-tr-l{font-size:11px;font-weight:600;color:#854F0B;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.fc-tr-t{font-size:13px;color:#633806;line-height:1.6;font-style:italic}
+.fc-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.fc-btn{padding:10px 20px;border:1px solid #ddd;border-radius:10px;background:#fff;color:#1a1a1a;font-size:14px;cursor:pointer;font-family:inherit;transition:all 0.15s;font-weight:500}
+.fc-btn.reveal{background:#1a1a1a;color:#C9A227;border-color:#1a1a1a}
+.fc-btn.reveal:hover{background:#2a2a2a}
+.fc-btn.got{background:#E1F5EE;color:#0F6E56;border-color:#9FE1CB}
+.fc-btn.skip{background:#FCEBEB;color:#A32D2D;border-color:#F7C1C1}
+.fc-done{text-align:center;padding:2rem 1rem}
+.fc-done-title{font-size:22px;font-weight:600;color:#C9A227;margin-bottom:8px}
+.fc-done-sub{font-size:14px;color:#888;margin-bottom:20px;line-height:1.6}
+.restart-btn{background:#1a1a1a;color:#C9A227;border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;margin-bottom:8px;width:100%}
+footer{text-align:center;padding:2rem 0 1rem;font-size:12px;color:#aaa}
+footer a{color:#C9A227;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="header">
+  <svg width="52" height="58" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50 5 L90 20 L90 55 C90 80 70 100 50 105 C30 100 10 80 10 55 L10 20 Z" fill="#808080" stroke="#1a1a1a" stroke-width="4"/>
+    <path d="M50 12 L83 25 L83 55 C83 76 65 94 50 99 C35 94 17 76 17 55 L17 25 Z" fill="#9a9a9a"/>
+    <ellipse cx="50" cy="72" rx="20" ry="16" fill="none" stroke="#e0e0e0" stroke-width="2"/>
+    <line x1="50" y1="56" x2="50" y2="88" stroke="#e0e0e0" stroke-width="1.5"/>
+    <line x1="30" y1="72" x2="70" y2="72" stroke="#e0e0e0" stroke-width="1.5"/>
+    <ellipse cx="50" cy="72" rx="12" ry="16" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
+    <path d="M38 45 Q50 38 62 45 L62 58 Q50 52 38 58 Z" fill="#ffffff" opacity="0.9"/>
+    <path d="M38 45 Q50 53 62 45 Q62 38 50 32 Q38 38 38 45Z" fill="#ffffff"/>
+    <rect x="36" y="26" width="28" height="3" rx="1.5" fill="#C9A227"/>
+    <polygon points="50,18 66,26 34,26" fill="#C9A227"/>
+    <rect x="48" y="29" width="4" height="7" fill="#1a1a1a"/>
+    <circle cx="50" cy="37" r="2.5" fill="#1a1a1a"/>
+  </svg>
+  <div>
+    <div class="app-title">Tech Decoded</div>
+    <div class="app-sub">Agile Wealth Academy &middot; by Dr. An Sean</div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab active" id="tab-browse" onclick="switchMode('browse')">Browse dictionary</button>
+  <button class="mode-tab" id="tab-flash" onclick="switchMode('flashcard')">Flashcard study</button>
+</div>
+
+<div id="browse-mode">
+  <div class="controls">
+    <div class="search-wrap"><input type="text" id="srch" placeholder="Search any tech term..." oninput="renderBrowse()" autocomplete="off"></div>
+    <select class="cat-select" id="cat" onchange="renderBrowse()">
+      <option value="all">All categories</option>
+      <option value="Ceremony">Ceremony</option>
+      <option value="Role">Role</option>
+      <option value="Artifact">Artifact</option>
+      <option value="Metric">Metric</option>
+      <option value="Tool">Tool</option>
+      <option value="Concept">Concept</option>
+    </select>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-n" id="st-show">25</div><div class="stat-l">Showing</div></div>
+    <div class="stat"><div class="stat-n">110</div><div class="stat-l">Total terms</div></div>
+    <div class="stat"><div class="stat-n" id="st-access">Free</div><div class="stat-l">Your access</div></div>
+  </div>
+  <div id="browse-list"></div>
+</div>
+
+<div id="flashcard-mode" style="display:none">
+  <div class="fc-score">
+    <div class="fc-score-item"><div class="fc-score-n" id="fc-got">0</div><div class="fc-score-l">Got it</div></div>
+    <div class="fc-score-item"><div class="fc-score-n" id="fc-rem">25</div><div class="fc-score-l">Remaining</div></div>
+    <div class="fc-score-item"><div class="fc-score-n" id="fc-skip">0</div><div class="fc-score-l">Still learning</div></div>
+  </div>
+  <div id="fc-content"></div>
+</div>
+
+<footer>
+  <p>Tech Decoded &copy; 2025 Agile Wealth Academy</p>
+  <p style="margin-top:6px"><a href="https://stan.store/iamdransean" target="_blank">stan.store/iamdransean</a> &middot; <a href="https://tiktok.com/@iamdransean" target="_blank">@iamdransean</a></p>
+</footer>
+
+</div>
+
+<script>
+const FREE_LIMIT = 25;
+
+const allTerms = [
+  {term:"Acceptance Testing",cat:"Concept",def:"A formal description of the behavior of a software product, expressed as an example or usage scenario. Often automated to verify the system meets requirements.",trenches:"This is the moment of truth. Does the software do what we said it would do? Your acceptance criteria from your user story becomes your acceptance test checklist."},
+  {term:"Agile",cat:"Concept",def:"An iterative approach to project management and software development that helps teams deliver value faster. Work is completed in short cycles called Sprints rather than one long phase.",trenches:"Agile is not just a methodology — it is a mindset. Companies that get it right move faster, build better products, and have happier teams. That is why everyone wants an Agile Coach."},
+  {term:"Agile Coach",cat:"Role",def:"A professional who helps organizations and teams adopt and improve Agile practices at the team and organizational level, coaching leaders, Scrum Masters, and Product Owners.",trenches:"This is the next level after Scrum Master. You are not just running ceremonies anymore — you are transforming entire organizations. This is where my heart is."},
+  {term:"Agile Manifesto",cat:"Concept",def:"A foundational document created in 2001 by 17 software engineers that defines the four core values and twelve principles of Agile software development.",trenches:"Know these four values cold before any interview. Individuals and interactions. Working software. Customer collaboration. Responding to change. Period."},
+  {term:"Alerts",cat:"Tool",def:"Automated notifications triggered when a system experiences an error, performance issue, or unexpected behavior. Monitored by DevOps and production support teams.",trenches:"When your phone buzzes at 2am with an alert — that is real life in tech. Know what alerts mean for your team and have a plan for when they fire."},
+  {term:"API",cat:"Tool",def:"Application Programming Interface — a software intermediary that allows two applications to talk to each other. Every time you swipe on Instagram or send a message, you are using an API.",trenches:"You do not need to build APIs — but you need to know what they are. When your backend developer says the API is down, you need to understand why that stops your whole team."},
+  {term:"AWS",cat:"Tool",def:"Amazon Web Services — the world's most widely used cloud computing platform. AWS provides infrastructure, storage, databases, and deployment services that most tech companies rely on.",trenches:"You will hear AWS constantly. When your DevOps team says we are hosting on AWS — that means your application lives in Amazon's cloud. Know who on your team owns it."},
+  {term:"Azure DevOps (ADO)",cat:"Tool",def:"Microsoft's project management and DevOps platform. A direct competitor to Jira with a backlog, Sprint boards, pipelines, and reporting.",trenches:"You may walk into a company using ADO instead of Jira. Do not panic — it looks different but works the same way. You already know how to think about it."},
+  {term:"Backlog",cat:"Artifact",def:"An ordered list of all the work to be done for a product. The team's master wish list, managed and prioritized by the Product Owner.",trenches:"The backlog is never done. It is a living, breathing document. Your job is to make sure it is always prioritized, refined, and ready for the next Sprint."},
+  {term:"Backlog Refinement",cat:"Ceremony",def:"A regular meeting where the Product Owner and team add clarity and priority to backlog items. Great refinement makes Sprint Planning easy.",trenches:"This is the most underrated meeting in Scrum. If you do your refinement right, Sprint Planning becomes a 30-minute conversation instead of a 4-hour debate."},
+  {term:"BDD",cat:"Concept",def:"Behavior Driven Development — a practice where team members discuss the expected behavior of a system to build shared understanding before writing code.",trenches:"Think of BDD as everyone agreeing on what done looks like before anyone writes a single line of code. Fewer surprises at Sprint Review."},
+  {term:"Bottleneck",cat:"Concept",def:"A point in the workflow where work slows down or stops due to limited capacity, a blocked dependency, or an overburdened team member.",trenches:"Your burndown chart will show you a bottleneck before anyone says a word. When work stops moving — find it. Nine times out of ten it is one person gatekeeping knowledge."},
+  {term:"Branch / Branching",cat:"Concept",def:"A copy of the codebase created so developers can work on a new feature or fix without affecting the main code. Once complete it is merged back in.",trenches:"Branching is how your developers work in parallel without stepping on each other. Make sure branches get reviewed and merged before the Sprint closes."},
+  {term:"Bridge",cat:"Concept",def:"A conference call or virtual meeting line that multiple team members join simultaneously to collaborate on resolving a critical issue or outage in real time.",trenches:"When someone says keep the bridge open it means do not hang up — we are not done yet. Facilitate, track progress, and keep noise down so your team can think."},
+  {term:"Bug",cat:"Concept",def:"An error or flaw in software that causes it to produce incorrect results or behave in unintended ways. Also called a defect.",trenches:"Bugs are inevitable. What matters is how fast your team catches them and fixes them. That is why QA and developers need to be best friends on your team."},
+  {term:"Burn-down Chart",cat:"Metric",def:"A chart showing work remaining in a Sprint over time. The line should slope downward as stories are completed. A flat line means the team is stuck.",trenches:"This is your Scrum Master best friend. Two days into your Sprint and the line is flat? Somebody is stuck — find out why right now, not at the end of the Sprint."},
+  {term:"Burn-up Chart",cat:"Metric",def:"A chart showing work completed over time, trending upward toward the total scope. Used to show progress on larger features or epics.",trenches:"Use your burnup chart in Sprint Reviews to show stakeholders how much of the overall feature is complete. They love seeing that line climbing toward the finish line."},
+  {term:"Capacity",cat:"Metric",def:"The total available work hours for a team in a Sprint. Formula: Team size x Productive hours x Sprint days. Used during Sprint Planning.",trenches:"Never load a Sprint without checking capacity first. If three people are on vacation, your team cannot commit to the same velocity as when everyone is present."},
+  {term:"Carryover",cat:"Concept",def:"Work committed to in a Sprint but not completed by the end. Carried over stories move to the next Sprint and signal a planning or execution problem.",trenches:"Carryover is the enemy. It tells me either the story was too big, the team overcommitted, or someone was blocking them. I want to know why every single time."},
+  {term:"Code Review",cat:"Concept",def:"The process where senior developers examine code before it moves to testing. Checks for errors, performance issues, and coding standards compliance.",trenches:"Always make code review happen before the testing column. A bug caught in code review costs nothing. A bug caught in production costs everything."},
+  {term:"Configuration",cat:"Concept",def:"The process of setting up software, systems, or environments with specific parameters to make them function correctly for a particular use case.",trenches:"Configuration issues are sneaky. The code is fine but the environment is set up wrong and nothing works. Always document configuration before a release."},
+  {term:"Confluence",cat:"Tool",def:"Atlassian's documentation and collaboration tool that integrates directly with Jira. Teams use it to store requirements, meeting notes, retrospectives, and team calendars.",trenches:"Confluence is where your team's knowledge lives. Set up your team calendar there, store your retrospective notes there, and make it the one place everyone goes."},
+  {term:"Continuous Deployment",cat:"Concept",def:"An approach where every code change that passes automated testing is automatically deployed to production without manual intervention.",trenches:"This is the gold standard for mature tech teams. When your developers commit code and it goes live automatically — that is continuous deployment working as designed."},
+  {term:"Continuous Integration",cat:"Concept",def:"The practice of merging code changes into a shared repository several times a day, with automated builds and tests to catch integration issues early.",trenches:"CI keeps your codebase healthy. Instead of waiting until the end of the Sprint to integrate everything — your team is merging and testing continuously."},
+  {term:"Cross Functional Team",cat:"Concept",def:"A team with all the skills needed to deliver a complete product increment — developers, QA, designers — without depending on outside teams.",trenches:"A truly cross functional team is self-sufficient. When I join a new team I immediately ask — do we have everything we need right here to deliver? If not, we have work to do."},
+  {term:"Daily Scrum",cat:"Ceremony",def:"A 15-minute daily meeting where the team answers: What did I do yesterday? What will I do today? Do I have any blockers?",trenches:"Keep it tight. Keep it focused. This is not a status report for management — it is the team holding each other accountable. Take deep dives offline."},
+  {term:"Dashboard",cat:"Tool",def:"A visual display of key metrics and data giving a real-time snapshot of a team's performance. In Jira, dashboards show velocity, burndown charts, sprint progress, and issue counts.",trenches:"Your dashboard is your command center. I pull mine up in every Sprint Review. When leadership asks how is the team doing — your dashboard gives the answer in seconds."},
+  {term:"Defect",cat:"Artifact",def:"A failure of the product to behave as expected. Defects are tracked in the backlog and prioritized by the Product Owner like any other work item.",trenches:"Defects are not failures — they are discoveries. The key is catching them before your customers do. That is why QA exists and why testing matters."},
+  {term:"Definition of Done",cat:"Concept",def:"A shared agreement on what complete means for any work item. A story is not done until it meets every item on this checklist.",trenches:"When a developer says it is done and QA says it is not — your Definition of Done settles the argument. Every team needs one and everyone must agree to it."},
+  {term:"Definition of Ready",cat:"Concept",def:"Criteria a user story must meet before the team accepts it into a Sprint. Based on the INVEST framework.",trenches:"If a story is not ready before Sprint Planning, do not bring it in. An unready story will waste your entire team's time."},
+  {term:"Delivery Team",cat:"Role",def:"The cross-functional group of developers, QA engineers, and designers who build the product. Also called the Development Team or Scrum Team.",trenches:"These are your people. Protect them, advocate for them, remove their blockers, and celebrate their wins. A Scrum Master who loves their team always has a team that delivers."},
+  {term:"DevOps",cat:"Role",def:"A set of practices combining software development and IT operations. DevOps teams manage deployments, infrastructure, pipelines, and production environments.",trenches:"Be best friends with your DevOps team. They control the pipeline that gets your code to production. I have seen entire Sprints saved by one great DevOps relationship."},
+  {term:"Distributed Team",cat:"Concept",def:"A team whose members work from different geographic locations. Relies heavily on digital tools, clear communication, and well-run ceremonies to stay aligned.",trenches:"I have managed teams across New York, California, India, and offshore. The secret is communication, not control. Make sure standup time works for everyone."},
+  {term:"Done",cat:"Concept",def:"A product increment where all design, coding, testing, and documentation are complete and it is ready to release.",trenches:"Done means DONE. Not almost done. Not waiting on one more thing. It met the acceptance criteria, passed QA, and is ready to go live."},
+  {term:"Downstream",cat:"Concept",def:"Teams, systems, or processes that receive output from your team's work. If your team builds something another team depends on, they are downstream.",trenches:"Know who is downstream from your team. If you are late or your code breaks, it is not just your Sprint that suffers. Build those relationships early."},
+  {term:"Enhancement",cat:"Artifact",def:"A request to improve or extend the functionality of an existing feature without fixing a bug. Enhancements add value to what already works.",trenches:"Make sure enhancements are properly estimated and prioritized in the backlog just like any other story — do not let them sneak into a Sprint unplanned."},
+  {term:"Epic",cat:"Artifact",def:"A large user story that is too big for one Sprint. Epics are broken down into smaller user stories and represent a complete feature.",trenches:"An epic is your big picture. Instagram Reels is an epic. The individual stories inside it are all the small pieces your team delivers Sprint by Sprint."},
+  {term:"Error",cat:"Concept",def:"An unexpected problem or failure in software that prevents it from functioning correctly. Typically logged for diagnosis and resolution.",trenches:"Errors are not failures — they are clues. Make sure errors get logged, assigned, and resolved. An ignored error today becomes a production outage tomorrow."},
+  {term:"Estimation",cat:"Concept",def:"The process of evaluating the effort required to complete a user story. In Scrum we use story points, not hours.",trenches:"Estimation is not a science — it is a conversation. The goal is to understand effort and complexity well enough to plan your Sprint."},
+  {term:"Extreme Programming (XP)",cat:"Concept",def:"An Agile framework emphasizing pair programming, test-driven development, and continuous refactoring to improve code quality.",trenches:"I use XP principles on my teams — specifically pair programming. Pairing a junior with a senior speeds up knowledge transfer and improves quality at the same time."},
+  {term:"Facilitator",cat:"Role",def:"A person who runs a meeting — guides discussion, keeps things on track, and ensures everyone is heard. The Scrum Master plays this role in all ceremonies.",trenches:"As a Scrum Master you control the room, the energy, and the outcome of every ceremony. Make every meeting count — even the daily standup."},
+  {term:"Fibonacci",cat:"Metric",def:"The number sequence (1, 2, 3, 5, 8, 13...) used to estimate story points. Higher numbers reflect more complexity. Anything over 13 needs to be broken down.",trenches:"The moment I see a story pointing above 13, I know we need to break it down. A 21-point story will not fit in a two-week Sprint. Period."},
+  {term:"Firewall",cat:"Tool",def:"A network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules.",trenches:"You will hear firewall come up most when your team needs access to something IT is blocking. Know who to call to get exceptions approved fast."},
+  {term:"Forecast",cat:"Concept",def:"The selection of items from the Product Backlog a Development Team deems feasible for a Sprint. A forecast is a commitment, not a guarantee.",trenches:"Keep your forecast realistic. An accurate forecast that gets delivered builds more trust than an ambitious forecast that falls short every Sprint."},
+  {term:"GCP",cat:"Tool",def:"Google Cloud Platform — Google's suite of cloud computing services. Like AWS, GCP provides infrastructure, storage, databases, and machine learning tools.",trenches:"Some companies use AWS, some use GCP, some use Microsoft Azure. Know which one your company uses and who your cloud team is when something goes down."},
+  {term:"Green",cat:"Concept",def:"An informal term used in tech to describe someone who is new, inexperienced, or just starting out in a role or technology.",trenches:"We were all green once. Being green is not a problem. Staying green is. Invest in your craft, ask questions, and get reps in as fast as you can."},
+  {term:"Herding Cats",cat:"Concept",def:"An informal term describing the challenge of coordinating a team of highly independent, strong-willed individuals toward a common goal.",trenches:"This is real life as a Scrum Master. Your developers are brilliant — and they all think they know best. Your job is not to control them. It is to channel them."},
+  {term:"Hot Fix",cat:"Concept",def:"An urgent, unplanned code change deployed immediately to fix a critical issue in production. Hot fixes bypass the normal Sprint process.",trenches:"A hot fix is the fire drill of software development. Something broke in production right now. Your job is to clear the path so your developers can move fast."},
+  {term:"Impediment",cat:"Concept",def:"Anything blocking the team from making progress. Removing impediments is one of the Scrum Master's most important responsibilities.",trenches:"Your team should never be sitting idle because something is in their way. That is on you. Find it, escalate it, and remove it — fast."},
+  {term:"Increment",cat:"Artifact",def:"The sum of all completed work at the end of a Sprint — working, potentially releasable software delivered every two weeks.",trenches:"Your increment is your proof. At the end of every Sprint show something real and working. Not a slide deck. Working software."},
+  {term:"INVEST",cat:"Concept",def:"A user story quality checklist: Independent, Negotiable, Valuable, Estimable, Small, Testable. A good story meets all six criteria.",trenches:"Before you accept any story into your Sprint, run it through INVEST. If it fails any criteria, send it back to the Product Owner for refinement."},
+  {term:"Issues",cat:"Artifact",def:"In Agile tools like Jira, issues is the general term for any work item — user stories, bugs, tasks, and epics are all considered issues.",trenches:"Know your issue count at all times. It tells you the health of your project at a glance."},
+  {term:"Iteration",cat:"Concept",def:"A fixed-length timebox during which development work takes place. In Scrum, iterations are called Sprints and are typically two weeks long.",trenches:"Every iteration is a mini project with a beginning, middle, and end. That structure is what makes Agile predictable even when requirements change."},
+  {term:"Jira",cat:"Tool",def:"The industry-standard project management tool for Agile teams. Used to manage backlogs, track Sprints, assign stories, and report on metrics.",trenches:"Learn Jira. Live in Jira. Your burndown chart, velocity, and backlog all live here. The companies I work with use Jira every single day."},
+  {term:"Journey Map",cat:"Artifact",def:"A visual diagram illustrating the steps a user takes to accomplish a goal when interacting with a product. Helps teams understand pain points and opportunities.",trenches:"Journey maps are a Product Owner's best friend. When your team understands the full user journey — not just their one story — they make better decisions every Sprint."},
+  {term:"Kanban",cat:"Concept",def:"An Agile framework that visualizes work on a board and limits work in progress. Best for production support teams with a continuous flow of incoming work.",trenches:"Kanban is Scrum's cousin. No sprints, no planning sessions — just a prioritized list and a board. If you are on a production support team, you are probably doing Kanban."},
+  {term:"Knowledge Transfer",cat:"Concept",def:"The process of sharing information, skills, and expertise from one team member to others. Essential for preventing knowledge silos.",trenches:"What happens if your only expert leaves tomorrow? That is why knowledge transfer is not optional on my teams. Everyone teaches. Everyone learns."},
+  {term:"Major Fix",cat:"Concept",def:"A significant code change addressing a serious bug, performance issue, or system failure. Requires analysis, planning, and testing before deployment.",trenches:"A major fix sits between a hot fix and a minor fix. Serious enough to get prioritized at the top of the backlog, but complex enough that you cannot rush it through."},
+  {term:"Microservice",cat:"Concept",def:"A software architecture approach where an application is built as small, independent services that each handle a specific function and communicate through APIs.",trenches:"Microservices are everywhere in modern tech. Know which team owns which microservice — because when one breaks, you need to know exactly who to call."},
+  {term:"Minimum Viable Product (MVP)",cat:"Concept",def:"The smallest version of a product that delivers real value to users. Build it fast, get it out, and improve based on real feedback.",trenches:"Stop waiting until it is perfect. An MVP gets your product into real hands so you can learn what people actually want. Perfect is the enemy of launched."},
+  {term:"Minor Fix",cat:"Concept",def:"A small, low priority code change that corrects a non-critical issue. Unlike a hot fix, a minor fix can be scheduled into the normal Sprint backlog.",trenches:"Not everything is an emergency — part of your job is helping stakeholders understand the difference. A minor fix can wait for the next Sprint. A hot fix cannot."},
+  {term:"OKR",cat:"Concept",def:"Objectives and Key Results — a goal-setting framework where teams set ambitious objectives and define measurable key results to track progress.",trenches:"OKRs tell you where you are going. Scrum tells you how to get there. Make sure your Sprint Goals are always connected to your OKRs."},
+  {term:"Pair Programming",cat:"Concept",def:"Two developers sharing one workstation — one writes code, one reviews in real time. Used to share knowledge and improve code quality.",trenches:"I use pair programming on my teams to get junior developers up to speed faster. The best part? The senior developer learns too — teaching forces real understanding."},
+  {term:"Patch",cat:"Concept",def:"A software update that fixes bugs, closes security vulnerabilities, or makes small improvements to an existing release. Focuses on stability.",trenches:"Think of a patch like a bandage. It is not a full rebuild — it is fixing a specific wound. Track patches in the backlog and deliver them consistently."},
+  {term:"PI Planning",cat:"Ceremony",def:"Program Increment Planning — a SAFe ceremony where multiple Agile teams align on goals, dependencies, and priorities for the next 8 to 12 weeks.",trenches:"If you work at a large company using SAFe, PI Planning is the big event. Executives, product managers, all teams in the same room. Knowing how to navigate it sets you apart."},
+  {term:"Planning Poker",cat:"Ceremony",def:"An estimation game where team members vote on story points simultaneously to avoid influence bias. Discussion happens when votes differ significantly.",trenches:"Everyone votes at the same time so the senior developer cannot sway the junior. Every voice matters equally in estimation. That is why I love Planning Poker."},
+  {term:"Product",cat:"Concept",def:"The software application, platform, or digital service a Scrum team is building and continuously improving. Everything the team does serves the product.",trenches:"Never lose sight of the product. Behind every user story is a real person who needs this thing to work. Know your product. Use your product. Advocate for your product."},
+  {term:"Product Backlog",cat:"Artifact",def:"The master ordered list of all work to be done on a product. Owned and prioritized by the Product Owner. Anyone can suggest items but only the PO decides the order.",trenches:"The backlog is the PO's baby. Your job is to help them keep it healthy, prioritized, and ready for the team — not to take it over."},
+  {term:"Product Owner",cat:"Role",def:"The person accountable for maximizing product value. They decide what gets built, in what order, and whether completed work meets acceptance criteria.",trenches:"Your Product Owner is your partner. Build a strong relationship with them. When the PO and Scrum Master are aligned, the whole team runs better."},
+  {term:"QA",cat:"Role",def:"Quality Assurance — testing software to ensure it meets requirements before it reaches users. QA engineers test positive and negative scenarios and report defects.",trenches:"Be best friends with your QA team. If your Sprint is about to close and you have stories that need to get through — your QA team can make or break that Sprint."},
+  {term:"QBR",cat:"Ceremony",def:"Quarterly Business Review — a formal meeting where teams present performance metrics, progress toward goals, and plans for the next quarter to senior leadership.",trenches:"QBRs are where your metrics tell your story. Velocity charts, burndown trends, release history — all presented to leadership. Know your numbers cold."},
+  {term:"RACI",cat:"Concept",def:"A responsibility matrix: Responsible, Accountable, Consulted, Informed. Used to clarify who does what on a team or project.",trenches:"RACI removes the confusion about who owns what. When I walk into a new organization I always ask for the RACI. It tells me everything about how the team operates."},
+  {term:"Release",cat:"Concept",def:"The deployment of a completed product increment to a production environment where real users can access it.",trenches:"This is the moment everything was building toward. The team delivered, QA approved it, and now it is live. Make every release feel like a celebration — because it is."},
+  {term:"Release Planning",cat:"Ceremony",def:"The process of mapping out which features and stories will be delivered across multiple Sprints to reach a product goal or launch date.",trenches:"Release planning is your roadmap. Without it you are just Sprinting with no finish line. Work with your PO to always know what is coming two to three Sprints ahead."},
+  {term:"Retrospective",cat:"Ceremony",def:"The final Sprint meeting — just the team and Scrum Master. What went well? What did not? What do we improve? Managers are not invited.",trenches:"My retrospectives are like Vegas. What happens there stays there. A team that trusts you will tell you everything. Never violate that trust."},
+  {term:"Risk",cat:"Concept",def:"A potential event or condition that could negatively impact the Sprint, project, or product if it occurs. Risks are identified, tracked, and mitigated proactively.",trenches:"Always asking — what could go wrong this Sprint? What dependencies do we have? Identify risks early and you can prevent them from becoming emergencies."},
+  {term:"Roadmap",cat:"Artifact",def:"A high-level visual plan that shows what a team will build and when. Aligns stakeholders on priorities and gives teams a long-term view.",trenches:"Your roadmap is your story of where this product is going. Jira's timeline view is a great place to build it. Stakeholders love seeing the big picture."},
+  {term:"Rollback",cat:"Concept",def:"The process of reverting a system to a previous version after a failed deployment or critical bug in production. Restores stability quickly.",trenches:"Sometimes the bravest thing you can do is roll it back. Make sure your team always has a rollback plan before they release anything."},
+  {term:"SAFe",cat:"Concept",def:"Scaled Agile Framework — an enterprise-level framework for applying Agile principles across large organizations with multiple teams.",trenches:"SAFe is Agile at scale. If your company has thousands of developers, SAFe is how they stay coordinated. Getting SAFe certified after Scrum Master is a smart next move."},
+  {term:"Sandbox",cat:"Tool",def:"A safe, isolated testing environment that mirrors production but does not affect real users or live data.",trenches:"No testing directly in production. Ever. Breaking things in the sandbox is how you avoid breaking things in front of real customers."},
+  {term:"Scope",cat:"Concept",def:"The defined boundaries of work for a Sprint, project, or feature. Defines what is included and what is not.",trenches:"Scope is your fence. Everything inside the fence is what we committed to. Everything outside the fence is scope creep waiting to happen."},
+  {term:"Scope Creep",cat:"Concept",def:"The gradual addition of unplanned work to a Sprint after it has started. Scope creep inflates workload and threatens Sprint goals.",trenches:"Scope creep is the silent Sprint killer. When new work tries to sneak in, you have to negotiate. Something comes in, something comes out."},
+  {term:"Scrum",cat:"Concept",def:"The most popular Agile framework. Built around Sprints, three roles, five ceremonies, and three artifacts. Delivers working software every two weeks.",trenches:"Scrum changed my life — and my pocketbook. Learn it deeply, live it fully, and never stop improving your craft."},
+  {term:"Scrum Board",cat:"Tool",def:"A visual board showing Sprint work organized into columns like To Do, In Progress, and Done. Can be physical or digital.",trenches:"Your board is your team's heartbeat. Every day in standup you should be on that board. If something has been in progress for three days without moving — someone is stuck."},
+  {term:"Scrum Master",cat:"Role",def:"The servant leader who facilitates ceremonies, removes impediments, protects the team, and coaches everyone on Scrum principles.",trenches:"We are not project managers. We are coaches, facilitators, and protectors. When your team wins, you win. That is the Scrum Master mindset."},
+  {term:"Scrum Values",cat:"Concept",def:"The five core values guiding every Scrum team: Commitment, Courage, Focus, Openness, and Respect.",trenches:"Print these out and put them on the wall. These are not suggestions — they are the foundation of every high performing Scrum team I have ever led."},
+  {term:"Servant Leader",cat:"Role",def:"A leadership philosophy where the leader's primary goal is to serve their team — removing obstacles, enabling growth, putting the team's needs first.",trenches:"This is who we are as Scrum Masters. We lead by serving. The more you pour into your team, the more they will pour into the product."},
+  {term:"SLA",cat:"Concept",def:"Service Level Agreement — a commitment that defines expected service levels, response times, and resolution targets between a service provider and client.",trenches:"SLAs are your team's promises in writing. Know your SLAs. Miss them consistently and trust breaks down fast."},
+  {term:"Soft Launch",cat:"Concept",def:"Releasing a product or feature to a limited audience before the full public release. Used to test functionality and gather real feedback.",trenches:"Think of it like a dress rehearsal. You are not ready for opening night yet — but you need real people in real seats to find out what still needs fixing."},
+  {term:"Sprint",cat:"Concept",def:"A fixed timeframe — usually two weeks — where the team commits to completing a set of stories. Sprints run consecutively with no gaps.",trenches:"Two weeks is the industry standard for a reason. Long enough to deliver something meaningful. Short enough to course-correct when things go wrong."},
+  {term:"Sprint Backlog",cat:"Artifact",def:"The subset of Product Backlog items the team commits to completing in a Sprint, plus the plan for delivering them.",trenches:"Once the Sprint starts, the Sprint Backlog is sacred. Protect it from scope creep and help your team get every story across the finish line."},
+  {term:"Sprint Goal",cat:"Artifact",def:"A short statement describing what the team will accomplish in the Sprint. Guides decisions when new work tries to enter.",trenches:"Every Sprint needs a goal. Not just a list of stories — a purpose. Your team should know what winning looks like before the two weeks even start."},
+  {term:"Sprint Planning",cat:"Ceremony",def:"The meeting that kicks off every Sprint. The team reviews the backlog, commits to stories, and sets the Sprint Goal. No Daily Standup on this day.",trenches:"Sprint Planning is where the Sprint is won or lost. Come in prepared. Know your velocity. Have your backlog refined. Commit to what your team can actually deliver."},
+  {term:"Sprint Review",cat:"Ceremony",def:"The Show and Tell — the team demonstrates completed work to stakeholders. The Product Owner accepts or rejects stories based on acceptance criteria.",trenches:"This is your team's moment to shine. Make it celebratory. Let your developers present their own work — it builds pride and confidence."},
+  {term:"Stakeholder",cat:"Role",def:"Anyone outside the Scrum Team with an interest in the product — executives, clients, end users. They attend Sprint Reviews to give feedback.",trenches:"Stakeholders are not the enemy. They are your customers. The more you communicate with them, the fewer surprises everyone has at the end."},
+  {term:"Story Points",cat:"Metric",def:"A unit of measure for estimating the effort, complexity, and risk of a user story. Based on the Fibonacci sequence. Not hours.",trenches:"Story points are not about how long something takes — they are about how hard it is. A story that takes a senior developer one hour might take a junior all day."},
+  {term:"Tech Specs",cat:"Artifact",def:"Technical specifications — a detailed document describing how a feature or system will be built, including architecture, data models, and API contracts.",trenches:"Make sure your team has reviewed and agreed on tech specs before a story hits the Sprint. Unresolved technical questions mid-Sprint are a carryover waiting to happen."},
+  {term:"Tech Stack",cat:"Concept",def:"The combination of programming languages, frameworks, databases, and tools a team uses to build and run their application.",trenches:"Know your team's tech stack. You do not need to code it — but you need to know what it is. It matters when hiring, onboarding new developers, and understanding complexity."},
+  {term:"Technical Debt",cat:"Concept",def:"The extra work created by taking shortcuts in development. Like financial debt — the longer you ignore it, the more it costs you later.",trenches:"Technical debt is real and it slows your team down over time. Make sure your Product Owner budgets Sprint time to pay it down regularly."},
+  {term:"Throughput",cat:"Metric",def:"The number of work items a team completes within a given time period. In Kanban, measures how many items flow through the system.",trenches:"Throughput is Kanban's version of velocity. If it is dropping week over week, something is slowing your team down. Find it before your stakeholders find it first."},
+  {term:"Timebox",cat:"Concept",def:"A fixed maximum time allocated to a meeting or activity. All Scrum ceremonies are timeboxed.",trenches:"Timeboxes exist to protect your team's time. Guard them. A standup that runs 45 minutes is a meeting in disguise. Keep to the box."},
+  {term:"Triage",cat:"Concept",def:"The process of evaluating and prioritizing defects, incidents, or incoming work items based on severity and business impact.",trenches:"Not everything that comes in is a Priority 1 — part of your job is helping your Product Owner make those triage calls quickly and confidently."},
+  {term:"Troubleshooting",cat:"Concept",def:"The systematic process of identifying, diagnosing, and resolving problems in software, systems, or processes.",trenches:"Troubleshooting is detective work. You are not the one fixing it — but you are the one making sure nothing is slowing down the people who are."},
+  {term:"Unit Test",cat:"Concept",def:"A software testing method where individual units or components of code are tested in isolation to verify each piece works correctly on its own.",trenches:"Encourage your team to write unit tests — even if they hate it. A developer who catches their own bug before QA saves your Sprint."},
+  {term:"Use Case",cat:"Artifact",def:"A description of how a user interacts with a system to accomplish a specific goal, outlining steps, conditions, and outcomes.",trenches:"A use case answers — what does the user actually do and what does the system do back? Think of it as the story before the user story."},
+  {term:"User Story",cat:"Artifact",def:"A plain-language description of a feature from the user's perspective. Format: As a [user], I want [action] so that [benefit]. Always includes acceptance criteria.",trenches:"A great user story tells your developers exactly what to build, for whom, and why. A bad user story creates confusion, carryover, and chaos."},
+  {term:"Validation",cat:"Concept",def:"The process of confirming a system or feature meets defined requirements and behaves as expected. Ensures the right thing was built.",trenches:"Validation is your QA team asking — did we build what the customer actually needed? Not just does it work, but does it work the right way for the right person."},
+  {term:"Velocity",cat:"Metric",def:"The average number of story points a team completes per Sprint, calculated over three to four Sprints. Used for Sprint Planning and forecasting.",trenches:"Velocity is your team's heartbeat. Know it at all times. Do not compare your velocity to another team's. Ever."},
+  {term:"Vendor",cat:"Role",def:"An external company or contractor providing software, tools, services, or resources to support the team's product development.",trenches:"Build relationships with your vendors early. Know their timelines. Never assume they will deliver without follow-up."},
+  {term:"Version Control",cat:"Tool",def:"A system that tracks and manages changes to code over time. Allows developers to save versions, collaborate, and revert to previous states. Git is the most widely used.",trenches:"Version control is how your development team never loses their work. Make sure your team is committing code regularly and not working in silos."},
+  {term:"Vision Statement",cat:"Concept",def:"A high-level description of the product including who it is for, why it is needed, and how it stands out. Guides the Product Owner's backlog decisions.",trenches:"Every product needs a north star. The vision statement is that star. When your team does not know why they are building something, the vision statement brings it back."},
+  {term:"War Room",cat:"Concept",def:"A temporary, dedicated space where key team members gather to rapidly address a critical issue, system outage, or high-priority incident.",trenches:"The first time someone said get in the war room I did not know if I should be scared or excited. Both. Keep the team focused, track what is being tried, and update leadership."},
+  {term:"White Label",cat:"Concept",def:"A product built by one company but rebranded and sold by another as their own. Common in fintech, healthcare, and SaaS industries.",trenches:"White label is more common than you think. Know who your real end user is — it affects requirements, branding decisions, and everything your team builds."},
+  {term:"Whitelist",cat:"Concept",def:"A list of approved users, IP addresses, applications, or email addresses granted access to a system or resource.",trenches:"Get your team whitelisted before the Sprint starts — not during it. A developer who cannot access what they need is a developer who cannot deliver."},
+  {term:"WIP Limit",cat:"Concept",def:"Work In Progress limit — the maximum number of items allowed in a Kanban column at once. Prevents bottlenecks and keeps work flowing.",trenches:"When your board shows more items in doing than your WIP limit allows — somebody is stuck. The WIP limit forces that conversation instead of hiding it."},
+  {term:"Wireframe",cat:"Artifact",def:"A simple visual blueprint of a web page or app screen showing layout and structure without color or final design. Created by UI/UX designers before development.",trenches:"Make sure your team has reviewed and approved the wireframes before a story enters the Sprint. A developer who starts coding without a wireframe is building blind."},
+  {term:"Working Agreement",cat:"Concept",def:"A set of norms and expectations the Scrum team creates together about how they will work, communicate, and hold each other accountable.",trenches:"Every team I lead starts with a working agreement. When someone breaks it you do not make it personal — you point to the agreement the team made together."},
+  {term:"XP",cat:"Concept",def:"Extreme Programming — development practices including pair programming, test-driven development, and continuous refactoring.",trenches:"XP is not as extreme as it sounds. Pair them up, test first, and refactor regularly. Your codebase will thank you."}
+];
+
+const sorted = [...allTerms].sort((a,b)=>a.term.localeCompare(b.term));
+let openCard = null;
+let fcQueue = [...sorted.slice(0,FREE_LIMIT)];
+let fcIndex = 0;
+let fcGot = 0;
+let fcSkip = 0;
+
+function switchMode(m){
+  document.getElementById('browse-mode').style.display=m==='browse'?'block':'none';
+  document.getElementById('flashcard-mode').style.display=m==='flashcard'?'block':'none';
+  document.getElementById('tab-browse').className='mode-tab'+(m==='browse'?' active':'');
+  document.getElementById('tab-flash').className='mode-tab'+(m==='flashcard'?' active':'');
+  if(m==='flashcard') renderFC();
+}
+
+function badge(cat){
+  return '<span class="cat-badge cat-'+cat+'">'+cat+'</span>';
+}
+
+function renderBrowse(){
+  const q=document.getElementById('srch').value.toLowerCase();
+  const cat=document.getElementById('cat').value;
+  const list=document.getElementById('browse-list');
+  const filtered=sorted.filter(t=>(cat==='all'||t.cat===cat)&&(t.term.toLowerCase().includes(q)||t.def.toLowerCase().includes(q)));
+  document.getElementById('st-show').textContent=filtered.length;
+  if(!filtered.length){list.innerHTML='<div class="no-res">No terms found. Try a different search.</div>';return;}
+  let html='';let curL='';let pwShown=false;
+  filtered.forEach(t=>{
+    const idx=sorted.indexOf(t);
+    const locked=idx>=FREE_LIMIT;
+    if(!pwShown&&locked&&!q&&cat==='all'){
+      pwShown=true;
+      html+='<div class="paywall"><div class="pw-badge">Premium &mdash; '+(allTerms.length-FREE_LIMIT)+' more terms</div><div class="pw-title">Unlock the full dictionary</div><div class="pw-sub">You have explored '+FREE_LIMIT+' free terms.<br>Get all '+allTerms.length+' terms plus flashcard study mode.</div><div class="pw-features"><div class="pw-feat"><span class="pw-check">+</span>All '+allTerms.length+' terms with From the Trenches insights</div><div class="pw-feat"><span class="pw-check">+</span>Flashcard study mode &mdash; all '+allTerms.length+' terms</div><div class="pw-feat"><span class="pw-check">+</span>Filter by Ceremony, Role, Metric, Tool &amp; more</div><div class="pw-feat"><span class="pw-check">+</span>Works on any phone or computer</div><div class="pw-feat"><span class="pw-check">+</span>Yours forever &mdash; no subscription</div></div><button class="pw-btn" onclick="window.open(\'https://stan.store/iamdransean\',\'_blank\')">Get full access &mdash; $27</button><div class="pw-note">stan.store/iamdransean</div></div>';
+    }
+    const L=t.term[0].toUpperCase();
+    if(L!==curL&&(!locked||q||cat!=='all')){curL=L;html+='<div class="letter-head">'+L+'</div>';}
+    html+='<div class="term-card'+(locked?' locked':'')+(openCard===idx?' open':'')+'" id="c'+idx+'" onclick="'+(locked?'':'tog('+idx+')')+'"><div class="term-row"><span class="term-name">'+t.term+'</span><div class="term-right">'+badge(t.cat)+(locked?'<span class="lock-icon">&#128274;</span>':'<span class="arr'+(openCard===idx?' open':'')+'" id="a'+idx+'">&#9660;</span>')+'</div></div><div class="term-body'+(openCard===idx?' show':'')+'" id="b'+idx+'"><div class="def-text">'+t.def+'</div><div class="trenches"><div class="tr-label">From the Trenches</div><div class="tr-text">&ldquo;'+t.trenches+'&rdquo;</div></div></div></div>';
+  });
+  list.innerHTML=html;
+}
+
+function tog(idx){
+  if(openCard!==null&&openCard!==idx){
+    var ob=document.getElementById('b'+openCard);
+    var oa=document.getElementById('a'+openCard);
+    var oc=document.getElementById('c'+openCard);
+    if(ob)ob.classList.remove('show');
+    if(oa)oa.classList.remove('open');
+    if(oc)oc.classList.remove('open');
+  }
+  var b=document.getElementById('b'+idx);
+  var a=document.getElementById('a'+idx);
+  var c=document.getElementById('c'+idx);
+  b.classList.toggle('show');
+  a.classList.toggle('open');
+  c.classList.toggle('open');
+  openCard=b.classList.contains('show')?idx:null;
+}
+
+function renderFC(){
+  document.getElementById('fc-got').textContent=fcGot;
+  document.getElementById('fc-rem').textContent=fcQueue.length;
+  document.getElementById('fc-skip').textContent=fcSkip;
+  var content=document.getElementById('fc-content');
+  if(fcQueue.length===0){
+    content.innerHTML='<div class="fc-done"><div class="fc-done-title">Amazing work!</div><div class="fc-done-sub">You studied all '+FREE_LIMIT+' free terms.<br>Ready to unlock all '+allTerms.length+' terms?</div><button class="pw-btn" onclick="window.open(\'https://stan.store/iamdransean\',\'_blank\')">Get full access &mdash; $27</button><button class="restart-btn" onclick="restartFC()">Restart free terms</button></div>';
+    return;
+  }
+  var t=fcQueue[0];
+  var total=FREE_LIMIT;
+  var done=fcGot+fcSkip;
+  content.innerHTML='<div class="fc-prog">Card '+(done+1)+' of '+total+'</div><div class="fc-card"><div class="fc-cat-b">'+badge(t.cat)+'</div><div class="fc-term">'+t.term+'</div><div class="fc-def" id="fcd">'+t.def+'</div><div class="fc-trenches" id="fct"><div class="fc-tr-l">From the Trenches</div><div class="fc-tr-t">&ldquo;'+t.trenches+'&rdquo;</div></div></div><div class="fc-btns"><button class="fc-btn reveal" onclick="revFC()">Reveal definition</button><button class="fc-btn got" id="btn-got" style="display:none" onclick="gotFC()">Got it &#10003;</button><button class="fc-btn skip" id="btn-skip" style="display:none" onclick="skipFC()">Still learning</button></div>';
+}
+
+function revFC(){
+  document.getElementById('fcd').classList.add('show');
+  document.getElementById('fct').classList.add('show');
+  document.querySelector('.fc-btn.reveal').style.display='none';
+  document.getElementById('btn-got').style.display='inline-block';
+  document.getElementById('btn-skip').style.display='inline-block';
+}
+
+function gotFC(){fcGot++;fcQueue.shift();renderFC();}
+function skipFC(){fcSkip++;fcQueue.push(fcQueue.shift());renderFC();}
+function restartFC(){fcQueue=[...sorted.slice(0,FREE_LIMIT)];fcGot=0;fcSkip=0;renderFC();}
+
+renderBrowse();
+</script>
+</body>
+</html>
