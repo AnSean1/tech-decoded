@@ -139,7 +139,7 @@ footer a{color:#C9A227;text-decoration:none}
 <footer><p>Tech Decoded Premium &copy; 2025 Agile Wealth Academy</p><p style="margin-top:6px"><a href="https://stan.store/iamdransean" target="_blank">stan.store/iamdransean</a> &middot; <a href="https://tiktok.com/@iamdransean" target="_blank">@iamdransean</a></p></footer>
 </div>
 <script>
-const PASSWORD="SCRUM2025";
+const PASSWORD="SCRUM2026";
 function tryLogin(){const input=document.getElementById('pwd-input').value.trim().toUpperCase();const err=document.getElementById('login-error');if(input===PASSWORD){sessionStorage.setItem('td_premium','1');document.getElementById('login-screen').style.display='none';document.getElementById('main-app').style.display='block';renderBrowse();err.style.display='none';}else{err.style.display='block';document.getElementById('pwd-input').value='';document.getElementById('pwd-input').focus();}}
 function logout(){sessionStorage.removeItem('td_premium');document.getElementById('login-screen').style.display='flex';document.getElementById('main-app').style.display='none';}
 if(sessionStorage.getItem('td_premium')==='1'){document.getElementById('login-screen').style.display='none';document.getElementById('main-app').style.display='block';}
